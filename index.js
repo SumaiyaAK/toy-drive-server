@@ -30,6 +30,7 @@ async function run() {
     await client.connect();
 
     const alltoysCollection = client.db('toyDrive').collection('alltoys');
+    const addToysCollection = client.db('toyDrive').collection('addToy');
 
     app.get('/alltoys', async(req, res) =>{
         const cursor = alltoysCollection.find();
@@ -40,8 +41,20 @@ async function run() {
     app.get('/alltoys/:id', async(req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id)}
-      const result = await alltoysCollection.findOne(query)
+
+      const options = {
+        projection: { ToyName: 1, price: 1, toys_id: 1},
+      }
+      const result = await alltoysCollection.findOne(query, options)
       res.send(result)
+    })
+
+    // addToy
+    app.post('/addToy', async(req, res)=> {
+        const addToy = req.body;
+        console.log(addToy);
+        const result = await addToysCollection.insertOne(addToy);
+        res.send(result);
     })
 
 
