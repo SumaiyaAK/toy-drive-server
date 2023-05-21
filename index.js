@@ -43,7 +43,7 @@ async function run() {
       const query = { _id: new ObjectId(id)}
 
       const options = {
-        projection: { ToyName: 1, price: 1, toys_id: 1, Img: 1},
+        projection: { ToyName: 1, price: 1, toys_id: 1, Img: 1, AvailableQuantity: 1},
       }
       const result = await alltoysCollection.findOne(query, options)
       res.send(result)
@@ -69,6 +69,22 @@ async function run() {
         console.log(addToy);
         const result = await addToysCollection.insertOne(addToy);
         res.send(result);
+    })
+
+    app.patch('/addToy/:id', async(req, res) =>{
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const updatedAddingToys  = req.body;
+      console.log(updatedAddingToys)
+      const updateDoc = {
+        $set: {
+          status: updatedAddingToys.status
+        },
+      };
+      const result = await addToysCollection.updateOne(filter, updateDoc);
+      res.send(result)
+      
+      
     })
 
     app.delete('/addToy/:id', async(req, res)=>{
