@@ -43,18 +43,39 @@ async function run() {
       const query = { _id: new ObjectId(id)}
 
       const options = {
-        projection: { ToyName: 1, price: 1, toys_id: 1},
+        projection: { ToyName: 1, price: 1, toys_id: 1, Img: 1},
       }
       const result = await alltoysCollection.findOne(query, options)
       res.send(result)
     })
 
     // addToy
+
+    app.get('/addToy', async(req, res) => {
+      console.log(req.query.email)
+      let query = {};
+      if(req.query?.email){
+        query = {email: req.query.email}
+      }
+
+      const result = await addToysCollection.find(query).toArray();
+      res.send(result);
+    })
+
+
     app.post('/addToy', async(req, res)=> {
+      
         const addToy = req.body;
         console.log(addToy);
         const result = await addToysCollection.insertOne(addToy);
         res.send(result);
+    })
+
+    app.delete('/addToy/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await addToysCollection.deleteOne(query);
+      res.send(result)
     })
 
 
