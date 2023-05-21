@@ -62,7 +62,7 @@ async function run() {
       res.send(result);
     })
 
-
+  // Post 
     app.post('/addToy', async(req, res)=> {
       
         const addToy = req.body;
@@ -70,6 +70,8 @@ async function run() {
         const result = await addToysCollection.insertOne(addToy);
         res.send(result);
     })
+
+    // Patch
 
     app.patch('/addToy/:id', async(req, res) =>{
       const id = req.params.id;
